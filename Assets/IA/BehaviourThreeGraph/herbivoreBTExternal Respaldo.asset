@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b23f08d2ae4cba14087c1ed36193d82b, type: 3}
-  m_Name: herbivoreBTExternal
+  m_Name: herbivoreBTExternal Respaldo
   m_EditorClassIdentifier: 
   mBehaviorSource:
     behaviorName: Behavior
@@ -27,11 +27,12 @@ MonoBehaviour:
         Am Not Lowheatlh","Instant":true,"SinglehealthThreshold":50},{"Type":"ActionNotColliderAttack","NodeData":{"Offset":"(-8.990143,130.310547)"},"ID":9,"Name":"Action
         Not Collider Attack","Instant":true},{"Type":"ActionFollowEnemy","NodeData":{"Offset":"(200.752914,125.270447)"},"ID":10,"Name":"Action
         Follow Enemy","Instant":true}]},{"Type":"BehaviorDesigner.Runtime.Tasks.Sequence","NodeData":{"Offset":"(99.3045044,237.385956)"},"ID":11,"Name":"Sequence","Instant":true,"AbortTypeabortType":"None","Children":[{"Type":"ActionNodeViewEnemy","NodeData":{"Offset":"(-169.639984,116.8468)"},"ID":12,"Name":"Action
-        Node View Enemy","Instant":true},{"Type":"IAmLowheatlh","NodeData":{"Offset":"(-36.5,230)"},"ID":13,"Name":"I
+        Node View Enemy","Instant":true},{"Type":"IAmLowheatlh","NodeData":{"Offset":"(-36.5,320)"},"ID":13,"Name":"I
         Am Lowheatlh","Instant":true,"SinglehealthThreshold":50},{"Type":"ActionColliderAttack","NodeData":{"Offset":"(87.451355,117.795959)"},"ID":14,"Name":"Action
         Collider Attack","Instant":true},{"Type":"ActionNodeAttack","NodeData":{"Offset":"(246.521149,117.795959)"},"ID":15,"Name":"Action
         Node Attack","Instant":true}]},{"Type":"BehaviorDesigner.Runtime.Tasks.Sequence","NodeData":{"Offset":"(685.3521,254.5109)"},"ID":16,"Name":"Sequence","Instant":true,"AbortTypeabortType":"None","Children":[{"Type":"ActionNodeViewEnemy","NodeData":{"Offset":"(-132.6087,130)"},"ID":17,"Name":"Action
-        Node View Enemy","Instant":true},{"Type":"ActionFlee","NodeData":{"Offset":"(175.326111,125)"},"ID":18,"Name":"Action
+        Node View Enemy","Instant":true},{"Type":"IAmNotLowheatlh","NodeData":{"Offset":"(40,200)"},"ID":18,"Name":"I
+        Am Not Lowheatlh","Instant":true,"SinglehealthThreshold":50},{"Type":"ActionFlee","NodeData":{"Offset":"(175.326111,125)"},"ID":19,"Name":"Action
         Flee","Instant":true}]}]}]}}'
       fieldSerializationData:
         typeName: []
