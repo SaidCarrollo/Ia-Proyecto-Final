@@ -6,31 +6,44 @@ using BehaviorDesigner.Runtime.Tasks;
 [TaskCategory("MyAI/Move")]
 public class ActionFlee : ActionNodeVehicle // ActionNodeVehicle hereda de ActionNode y tiene _IACharacterVehiculo
 {
-    // Ya no necesitamos 'isFleeing' ni 'fleeDestination' aquí.
-    // Esas se gestionan en IACharacterVehiculo.
-
     private FleeFuzzySystem _fleeFuzzySystem;
+    private FleeFuzzyConfig _fleeConfig; // Referencia al componente de configuración
 
+    // Umbrales (estos se mantienen)
     private const float CARNIVORE_FLEE_THRESHOLD = 0.5f;
     private const float CARNIVORE_STOP_FLEE_THRESHOLD = 0.45f;
     private const float HERBIVORE_FLEE_THRESHOLD = 0.4f;
 
     public override void OnStart()
     {
-        base.OnStart(); // Esto inicializa _IACharacterVehiculo y _UnitGame
-        if (_fleeFuzzySystem == null)
+        base.OnStart();
+
+        // Obtener el componente de configuración del GameObject
+        _fleeConfig = GetComponent<FleeFuzzyConfig>();
+        if (_fleeConfig == null)
         {
-            _fleeFuzzySystem = new FleeFuzzySystem();
+            Debug.LogError("El componente FleeFuzzyConfig no se encontró en el Agente.", gameObject);
+            return;
         }
-        // No es necesario llamar a _IACharacterVehiculo.ConcludeFleeState() aquí,
-        // OnEnd() se encargará de limpiar si la tarea es abortada.
+
+        // Seleccionar las curvas correctas según el tipo de unidad
+        FleeCurves curvesToUse = (_UnitGame == UnitGame.Carnivore) ?
+            _fleeConfig.CarnivoreFleeCurves :
+            _fleeConfig.HerbivoreFleeCurves;
+
+        // Inicializar el sistema difuso con las curvas seleccionadas
+        _fleeFuzzySystem = new FleeFuzzySystem(
+            curvesToUse.VeryLowHealthCurve,
+            curvesToUse.LowHealthCurve,
+            curvesToUse.ModerateHealthCurve,
+            curvesToUse.HighHealthCurve
+        );
     }
 
     public override TaskStatus OnUpdate()
     {
-        if (_IACharacterVehiculo == null || _IACharacterVehiculo.health.IsDead)
+        if (_fleeFuzzySystem == null || _IACharacterVehiculo == null || _IACharacterVehiculo.health.IsDead)
         {
-            // Si estaba huyendo y muere, asegurarse de limpiar el estado
             if (_IACharacterVehiculo != null && _IACharacterVehiculo.IsCurrentlyFleeing)
             {
                 _IACharacterVehiculo.ConcludeFleeState();
@@ -38,8 +51,11 @@ public class ActionFlee : ActionNodeVehicle // ActionNodeVehicle hereda de Actio
             return TaskStatus.Failure;
         }
 
+        // Asignar los valores de entrada al sistema difuso
         _fleeFuzzySystem.CurrentHealth = _IACharacterVehiculo.health.health;
-        _fleeFuzzySystem.CalculateFleeDecision(_UnitGame); // _UnitGame se obtiene de ActionNode
+        _fleeFuzzySystem.MaxHealth = _IACharacterVehiculo.health.healthMax; // ¡No olvides la vida máxima!
+        _fleeFuzzySystem.CalculateFleeDecision(_UnitGame);
+
         float currentFleeStrength = _fleeFuzzySystem.FleeDecisionStrength;
 
         // Lógica de interrupción para Carnívoros
@@ -48,7 +64,7 @@ public class ActionFlee : ActionNodeVehicle // ActionNodeVehicle hereda de Actio
             if (currentFleeStrength < CARNIVORE_STOP_FLEE_THRESHOLD)
             {
                 _IACharacterVehiculo.ConcludeFleeState();
-                return TaskStatus.Failure; // La condición para huir (estar bajo de salud) ya no se cumple
+                return TaskStatus.Failure;
             }
         }
 
@@ -93,17 +109,12 @@ public class ActionFlee : ActionNodeVehicle // ActionNodeVehicle hereda de Actio
             return TaskStatus.Running; // Sigue huyendo
         }
 
-        // Si llega aquí, significa que no está huyendo y no se decidió empezar a huir en este frame.
-        // Esto podría pasar si CARNIVORE_STOP_FLEE_THRESHOLD se cumple para un herbívoro,
-        // o si la lógica inicial de `if (!_IACharacterVehiculo.IsCurrentlyFleeing)` no resultó en `shouldStartFleeing`.
-        // Por seguridad, si no está huyendo y no se cumplieron otras condiciones, se considera Failure.
         return TaskStatus.Failure;
     }
 
     public override void OnEnd()
     {
-        // Asegurarse de que el personaje deje de huir si la tarea termina
-        // por cualquier razón (éxito, fallo, o abortada por el Behavior Tree).
+
         if (_IACharacterVehiculo != null && _IACharacterVehiculo.IsCurrentlyFleeing)
         {
             _IACharacterVehiculo.ConcludeFleeState();
