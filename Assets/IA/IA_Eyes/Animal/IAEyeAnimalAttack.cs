@@ -31,11 +31,12 @@ public class IAEyeAnimalAttack : IAEyeAttack
     {
         mainDataView.CreateMesh();
         AttackDataView.CreateMesh();
-
+        RadioActionDataView.CreateMesh();
     }
     private void OnDrawGizmos()
     {
         mainDataView.OnDrawGizmos();
         AttackDataView.OnDrawGizmos();
+        RadioActionDataView.OnDrawGizmos();
     }
 }

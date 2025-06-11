@@ -87,9 +87,22 @@ public class IACharacterVehiculo : IACharacterControl
 
     Vector3 RandoWander(Vector3 position, float range)
     {
-        Vector3 randP = Random.insideUnitSphere * range;
-        randP.y = transform.position.y; // Mantener en el mismo plano Y
-        return position + randP;
+        Vector3 randomDirection = Random.insideUnitSphere * range;
+        randomDirection.y = 0; // Mantener en plano horizontal
+
+        Vector3 targetPosition = position + randomDirection;
+
+        NavMeshHit hit;
+        for (int i = 0; i < 30; i++)
+        {
+            if (NavMesh.SamplePosition(targetPosition, out hit, range, NavMesh.AllAreas))
+            {
+                return hit.position;
+            }
+        }
+
+        // Si falla, regresa la posición original
+        return position;
     }
 
     // Método existente, se mantiene igual
