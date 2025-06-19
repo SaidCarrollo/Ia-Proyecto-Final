@@ -58,8 +58,8 @@ public class ActionFollowEnemy : ActionNodeVehicle
             case UnitGame.Hunter:
                 if (_IACharacterVehiculo is IACharacterVehiculoHunter)
                 {
-                    ((IACharacterVehiculoSoldier)_IACharacterVehiculo).MoveToEnemy();
-                    ((IACharacterVehiculoSoldier)_IACharacterVehiculo).LookEnemy();
+                    ((IACharacterVehiculoHunter)_IACharacterVehiculo).MoveToEnemy();
+                    ((IACharacterVehiculoHunter)_IACharacterVehiculo).LookEnemy();
                 }
                 break;
             case UnitGame.None:

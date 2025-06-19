@@ -35,6 +35,13 @@ public class ActionMoveStrategy : ActionNodeVehicle
                     ((IACharacterVehiculoSoldier)_IACharacterVehiculo).LookEnemy();
                 }
                 break;
+            case UnitGame.Hunter:
+                if (_IACharacterVehiculo is IACharacterVehiculoHunter)
+                {
+                    ((IACharacterVehiculoHunter)_IACharacterVehiculo).MoveToStrategy();
+                    ((IACharacterVehiculoHunter)_IACharacterVehiculo).LookEnemy();
+                }
+                break;
             case UnitGame.None:
                 break;
             default:

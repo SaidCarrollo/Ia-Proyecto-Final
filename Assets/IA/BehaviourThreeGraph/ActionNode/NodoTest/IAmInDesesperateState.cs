@@ -5,7 +5,7 @@ using BehaviorDesigner.Runtime.Tasks;
 [TaskDescription("Verifica si la unidad tiene una cantidad de vida críticamente baja, para un ataque desesperado.")]
 public class IAmInDesperateState : ActionNodeVehicle
 {
-    [SerializeField] float desperateHealthThreshold = 25f; 
+    [SerializeField] float desperateHealthThreshold = 50f; 
 
     public override TaskStatus OnUpdate()
     {

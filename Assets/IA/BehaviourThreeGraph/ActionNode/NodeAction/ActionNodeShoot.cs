@@ -40,6 +40,12 @@ public class ActionNodeShoot : ActionNodeAction
                     ((IACharacterActionsSoldier)_IACharacterActions).Shoot();
                 }
                 break;
+            case UnitGame.Hunter:
+                if (_IACharacterActions is IACharacterActionsHunter)
+                {
+                    ((IACharacterActionsHunter)_IACharacterActions).Shoot();
+                }
+                break;
             case UnitGame.None:
                 break;
             default:
