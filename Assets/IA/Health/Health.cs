@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public enum TypeAgent { A, B, C, D, E, F }
+public enum TypeAgent { A, B, C, D, E }
 public enum UnitGame
 {
     Zombie,

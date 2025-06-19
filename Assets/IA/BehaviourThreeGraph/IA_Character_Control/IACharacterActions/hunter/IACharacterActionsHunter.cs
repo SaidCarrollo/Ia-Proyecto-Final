@@ -26,8 +26,13 @@ public class IACharacterActionsHunter : IACharacterActions
     }
     public void Shoot()
     {
-        
+        if (FrameRate > Rate)
+        {
+            FrameRate = 0;
             Debug.Log("Shoot " + Time.time);
+        }
+        FrameRate += Time.deltaTime;
+        //Debug.Log("Shoot " + Time.time);
         
     }
 }
