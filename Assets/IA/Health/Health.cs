@@ -37,7 +37,7 @@ public class Health : MonoBehaviour
     public bool Importal = false;
     public UnitGame _UnitGame;
     public bool IsCantView=true;
-
+    [SerializeField] private GameObject itemDropOnDeathPrefab;
     IEnumerator HurtingMeActive(Health enemy)
     {
         HurtingMe = enemy;
@@ -62,7 +62,14 @@ public class Health : MonoBehaviour
             if (enemy != null)
                 HurtingMeroutine = StartCoroutine(HurtingMeActive(enemy));
         }
+        if (IsDead)
+        {
+            if (itemDropOnDeathPrefab != null)
+            {
 
+                Instantiate(itemDropOnDeathPrefab, transform.position, Quaternion.identity);
+            }
+        }
     }
 
     

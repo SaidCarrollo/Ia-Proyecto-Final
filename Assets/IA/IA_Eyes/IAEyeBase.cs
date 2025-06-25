@@ -222,7 +222,7 @@ public class IAEyeBase : MonoBehaviour
     public Transform AimOffset;
     public Health ViewEnemy;
     public Health ViewAllie;// { get; set; }
-
+    public Item ViewItem { get; private set; }
     public Vector3 Target { get; set; }
 
    
@@ -289,6 +289,7 @@ public class IAEyeBase : MonoBehaviour
     {
         health = GetComponent<Health>();
         mainDataView.Owner = health;
+        RadioActionDataView.Owner = health;
         Framerate = 0;
         index = 0;
         arrayRate = new float[bufferSize];
@@ -316,7 +317,11 @@ public class IAEyeBase : MonoBehaviour
         {
             ViewEnemy = null;
         }
-
+        if (ViewItem == null)
+        {
+            // La referencia ya es nula, no hay que hacer nada.
+            // Esto previene un error si el objeto fue destruido en el frame anterior.
+        }
     }
 
     public virtual void Scan()
@@ -324,21 +329,23 @@ public class IAEyeBase : MonoBehaviour
         if (health.HurtingMe != null) return;
         ViewAllie = null;
         ViewEnemy = null;
+        ViewItem = null;
         Collider[] colliders = Physics.OverlapSphere(transform.position, mainDataView.Distance, mainDataView.Scanlayers);
         CountEnemyView = 0;
         count = colliders.Length;
 
-        
+        float min_dist_enemy = float.MaxValue;
+        float min_dist_item = float.MaxValue;
         float min_dist = 10000000000f;
 
         for (int i = 0; i < count; i++)
         {
 
             GameObject obj = colliders[i].gameObject;
-            
+
             if (this.IsNotIsThis(this.gameObject, obj))
             {
-                
+
                 Health Scanhealth = obj.GetComponent<Health>();
                 if (Scanhealth != null &&
                     obj.activeSelf &&
@@ -348,15 +355,29 @@ public class IAEyeBase : MonoBehaviour
                 {
                     ExtractViewEnemy(ref min_dist, Scanhealth);
                 }
+                Item scanItem = obj.GetComponent<Item>();
+                if (scanItem != null && mainDataView.IsInSight(scanItem.transform))
+                {
+                    // Filtramos para que un carnívoro solo se interese por la carne
+                    if (health._UnitGame == UnitGame.Carnivore && scanItem.itemType == ItemType.Carne)
+                    {
+                        float dist = (transform.position - scanItem.transform.position).magnitude;
+                        if (min_dist_item > dist)
+                        {
+                            ViewItem = scanItem;
+                            min_dist_item = dist;
+                        }
+                    }
+                }
+
+
+
 
             }
-
-
-
         }
 
     }
-
+       
     private void ExtractViewEnemy(ref float min_dist, Health _health)
     {
         
