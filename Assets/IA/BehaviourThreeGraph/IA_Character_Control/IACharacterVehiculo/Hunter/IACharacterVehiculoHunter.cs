@@ -4,40 +4,66 @@ using UnityEngine;
 
 public class IACharacterVehiculoHunter : IACharacterVehiculo
 {
+    // --- MÉTODOS Y VARIABLES RESTAURADOS DEL SCRIPT ORIGINAL ---
     Vector3 normales = Vector3.zero;
     public bool ISDrawGizmos = false;
-    // Start is called before the first frame update
+
+    // --- LÓGICA DEL CEREBRO Y REFERENCIA A LAS ACCIONES (DE LA REFACTORIZACIÓN) ---
+    private IACharacterActionsHunter actions;
+
     void Start()
     {
-        ISDrawGizmos=true;
+        ISDrawGizmos = true;
+        // Llamamos a LoadComponent desde Start para asegurar el orden de ejecución.
         this.LoadComponent();
     }
+
     public override void LoadComponent()
     {
         base.LoadComponent();
+        // Obtenemos la referencia a nuestro componente de acciones
+        actions = GetComponent<IACharacterActionsHunter>();
+        if (actions == null)
+        {
+            Debug.LogError("El componente IACharacterActionsHunter no se encuentra en " + gameObject.name, this);
+        }
     }
 
-    public override void MoveToPosition(Vector3 pos)
+
+
+    private void Update()
     {
-        base.MoveToPosition(pos);
+        if (actions == null) return;
+
+        // 1. Si hay un enemigo a la vista
+        if (AIEye.ViewEnemy != null)
+        {
+            // 1a. Si el enemigo está en rango de ataque, delega la acción de atacar.
+            if (((IAEyeShootAttack)AIEye).AttackDataView.Sight)
+            {
+                actions.AttackEnemy();
+            }
+            // 1b. Si no está en rango de ataque, se mueve hacia él.
+            // NOTA: Aquí podrías decidir usar MoveToEnemy() o tu lógica más avanzada MoveToStrategy()
+            // Por ejemplo: if(health.health < 50) { MoveToStrategy(); } else { MoveToEnemy(); }
+            else
+            {
+                MoveToEnemy();
+            }
+        }
+        // 2. Si no hay enemigos, patrulla.
+        else
+        {
+            MoveToWander();
+        }
     }
-    public override void MoveToEnemy()
-    {
-        base.MoveToEnemy( );
-    }
-    public override void MoveToAllied()
-    {
-        base.MoveToAllied( );
-    }
-    public override void MoveToEvadEnemy()
-    {
-        base.MoveToEvadEnemy( );
-    }
+
+
+
     public void MoveToStrategy()
     {
-        
         if (AIEye.ViewEnemy == null) return;
-        Vector3 dir = Vector3.zero; 
+        Vector3 dir = Vector3.zero;
         normales = ColliderWall();
         if (normales != Vector3.zero)
             dir = normales;
@@ -45,11 +71,10 @@ public class IACharacterVehiculoHunter : IACharacterVehiculo
         {
             dir = (transform.position - AIEye.ViewEnemy.transform.position).normalized;
         }
-        Vector3 newPosition = transform.position + dir*2;
-        MoveToPosition(newPosition );
-        
-        
+        Vector3 newPosition = transform.position + dir * 2;
+        MoveToPosition(newPosition);
     }
+
     Vector3 ColliderWall()
     {
         normales = Vector3.zero;
@@ -60,7 +85,8 @@ public class IACharacterVehiculoHunter : IACharacterVehiculo
         for (int i = 0; i < 2; i++)
         {
             RaycastHit hit;
-            if(Physics.Raycast(arrayRay[i],out hit, 3, AIEye.mainDataView.occlusionlayers))
+            // Usamos la capa de oclusión definida en el AIEye para las paredes
+            if (Physics.Raycast(arrayRay[i], out hit, 3, AIEye.mainDataView.occlusionlayers))
             {
                 normales += hit.normal;
             }
@@ -70,7 +96,9 @@ public class IACharacterVehiculoHunter : IACharacterVehiculo
 
     private void OnDrawGizmos()
     {
-        if (!ISDrawGizmos) return;
+        // Solo dibujar si el componente del ojo (AIEye) está disponible
+        if (!ISDrawGizmos || AIEye == null) return;
+
         Ray[] arrayRay = new Ray[3];
         arrayRay[0] = new Ray(health.AimOffset.position, health.AimOffset.right);
         arrayRay[1] = new Ray(health.AimOffset.position, -health.AimOffset.forward);
@@ -81,17 +109,14 @@ public class IACharacterVehiculoHunter : IACharacterVehiculo
             if (Physics.Raycast(arrayRay[i], out hit, 3, AIEye.mainDataView.occlusionlayers))
             {
                 Gizmos.color = Color.red;
-               
             }
             else
             {
                 Gizmos.color = Color.blue;
             }
-
-            Gizmos.DrawLine(arrayRay[i].origin, arrayRay[i].origin+ arrayRay[i].direction*3f);
-            Gizmos.DrawSphere(arrayRay[i].origin + arrayRay[i].direction * 3f, 0.7f);
+            Gizmos.DrawLine(arrayRay[i].origin, arrayRay[i].origin + arrayRay[i].direction * 3f);
+            Gizmos.DrawSphere(arrayRay[i].origin + arrayRay[i].direction * 3f, 0.2f);
         }
-        
 
         Gizmos.color = Color.yellow;
         if (normales != Vector3.zero)
@@ -99,6 +124,5 @@ public class IACharacterVehiculoHunter : IACharacterVehiculo
             Gizmos.DrawLine(health.AimOffset.position, health.AimOffset.position + normales * 2f);
             Gizmos.DrawSphere(health.AimOffset.position + normales * 2f, 0.5f);
         }
-            
     }
 }

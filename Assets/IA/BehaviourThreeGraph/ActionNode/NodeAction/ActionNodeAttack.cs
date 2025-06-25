@@ -44,7 +44,7 @@ public class ActionNodeAttack : ActionNodeAction
             case UnitGame.Hunter:
                 if (_IACharacterActions is IACharacterActionsHunter)
                 {
-                    ((IACharacterActionsHunter)_IACharacterActions).Attack();
+                    ((IACharacterActionsHunter)_IACharacterActions).AttackEnemy();
                 }
 
                 break;
