@@ -13,7 +13,7 @@ public class IACharacterVehiculo : IACharacterControl
     [SerializeField] protected float fleeMultiplier = 2f;
 
     public float RangeWander;
-    Vector3 positionWander;
+    protected Vector3 positionWander;
     float FrameRate = 0;
     float Rate = 4;
 

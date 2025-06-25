@@ -36,11 +36,11 @@ public class ActionMoveStrategy : ActionNodeVehicle
                 }
                 break;
             case UnitGame.Hunter:
-                if (_IACharacterVehiculo is IACharacterVehiculoHunter)
-                {
-                    ((IACharacterVehiculoHunter)_IACharacterVehiculo).MoveToStrategy();
-                    ((IACharacterVehiculoHunter)_IACharacterVehiculo).LookEnemy();
-                }
+                //if (_IACharacterVehiculo is IACharacterVehiculoHunter)
+                //{
+                //    ((IACharacterVehiculoHunter)_IACharacterVehiculo).MoveToStrategy();
+                //    ((IACharacterVehiculoHunter)_IACharacterVehiculo).LookEnemy();
+                //}
                 break;
             case UnitGame.None:
                 break;
