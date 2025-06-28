@@ -5,24 +5,28 @@ using UnityEngine;
 public class WeaponRifle : WeaponBase
 {
     public LayerMask enemyLayer;
+
     // Start is called before the first frame update
     void Awake()
     {
         LoadComponent();
     }
+
     public override void LoadComponent()
     {
         base.LoadComponent();
     }
+
     // Update is called once per frame
-    public virtual void Shoot()
+    // --- SE HA CAMBIADO 'virtual' POR 'override' ---
+    public override void Shoot()
     {
         if (!canShoot) return;
 
         if (Time.time < FrameRate) return;
         FrameRate = Time.time + Rate;
 
-        _MuzzleFlashWeamon.Play(); //
+        _MuzzleFlashWeamon.Play();
 
         Transform muzzleTransform = _MuzzleFlashWeamon.root != null ? _MuzzleFlashWeamon.root.transform : this.transform;
         Vector3 rayOrigin = muzzleTransform.position;
@@ -42,7 +46,6 @@ public class WeaponRifle : WeaponBase
             }
             else
             {
-                // --- AÑADE ESTA LÍNEA ---
                 Debug.LogWarning("<color=yellow>El objeto impactado '" + hit.collider.name + "' no tiene un componente Health.</color>", hit.collider.gameObject);
             }
         }

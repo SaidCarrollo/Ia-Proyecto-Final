@@ -37,7 +37,23 @@ public class Health : MonoBehaviour
     public bool Importal = false;
     public UnitGame _UnitGame;
     public bool IsCantView=true;
-    [SerializeField] private GameObject itemDropOnDeathPrefab;
+    //[SerializeField] private GameObject itemDropOnDeathPrefab;
+
+    private bool deathSequenceStarted = false;
+
+    // --- Referencia al nuevo script ---
+    private DeathHandler deathHandler;
+    private void Awake()
+    {
+        // Obtenemos la referencia al DeathHandler. Es obligatorio que esté en el mismo objeto.
+        deathHandler = GetComponent<DeathHandler>();
+        if (deathHandler == null)
+        {
+            Debug.LogError("El componente DeathHandler no se encuentra en este GameObject. ¡Es necesario!", this);
+        }
+        LoadComponent();
+    }
+    
     IEnumerator HurtingMeActive(Health enemy)
     {
         HurtingMe = enemy;
@@ -46,33 +62,40 @@ public class Health : MonoBehaviour
         StopCoroutine(HurtingMeroutine);
     }
 
-    public virtual void Damage(int damage,Health enemy)
+    public virtual void Damage(int damage, Health enemy)
     {
-        
-        if (Importal) return;
-       
+        if (Importal || deathSequenceStarted) return;
+
         if (!IsDead)
         {
-           
-            if ((health - damage) > 0)
-                health -= damage;
-            else
-                health = 0;
-            UpdateHealthBar();
-            if (enemy != null)
-                HurtingMeroutine = StartCoroutine(HurtingMeActive(enemy));
-        }
-        if (IsDead)
-        {
-            if (itemDropOnDeathPrefab != null)
-            {
+            health -= damage;
+            if (health < 0) health = 0;
 
-                Instantiate(itemDropOnDeathPrefab, transform.position, Quaternion.identity);
+            UpdateHealthBar();
+
+            if (enemy != null)
+            {
+                if (HurtingMeroutine != null)
+                {
+                    StopCoroutine(HurtingMeroutine);
+                }
+                HurtingMeroutine = StartCoroutine(HurtingMeActive(enemy));
             }
+        }
+
+        // Si muere y la secuencia no ha comenzado...
+        if (IsDead && !deathSequenceStarted)
+        {
+            deathSequenceStarted = true;
+            // ...le decimos al DeathHandler que inicie la secuencia.
+            deathHandler.StartDeathSequence();
+
+            // Opcional: Desactivar este script para que no pueda recibir más daño.
+            this.enabled = false;
         }
     }
 
-    
+
     public void UpdateHealthBar()
     {
         if (HealthBarLocal != null)
@@ -85,8 +108,9 @@ public class Health : MonoBehaviour
     public virtual void LoadComponent()
     {
         health = healthMax;
-
-
+        deathSequenceStarted = false;
+        UpdateHealthBar();
+        this.enabled = true;
     }
 
 

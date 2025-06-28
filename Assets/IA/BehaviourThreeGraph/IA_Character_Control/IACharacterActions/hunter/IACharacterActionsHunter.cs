@@ -22,17 +22,26 @@ public class IACharacterActionsHunter : IACharacterActions
 
     public void AttackEnemy()
     {
-         
-        if (AIEye.ViewEnemy == null) return;
+      //  Debug.Log("AttackEnemy() ha sido llamado.");
+
+        if (AIEye.ViewEnemy == null)
+        {
+            // AÑADE ESTO PARA CONFIRMAR EL FALLO
+          //  Debug.LogWarning("Intento de ataque fallido: AIEye.ViewEnemy es NULL. No hay enemigo a la vista.");
+            return;
+        }
+      //  Debug.Log("IACharacterActionsHunter: Intentando disparar al enemigo: " + AIEye.ViewEnemy.name);
+        // Si el código llega aquí, significa que SÍ ha detectado un enemigo.
+       // Debug.Log("<color=cyan>Enemigo detectado: " + AIEye.ViewEnemy.name + ". Procediendo a disparar.</color>");
 
         // La acción de atacar implica detenerse
         if (agent != null && agent.isOnNavMesh)
         {
             agent.ResetPath();
         }
-         
+
         // Ejecuta el disparo
-        _WeaponsManager.Fire( );
+        _WeaponsManager.Fire();
     }
     public virtual void LookEnemy()
     {
