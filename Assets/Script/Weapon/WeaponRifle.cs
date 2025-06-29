@@ -31,12 +31,14 @@ public class WeaponRifle : WeaponBase
         Transform muzzleTransform = _MuzzleFlashWeamon.root != null ? _MuzzleFlashWeamon.root.transform : this.transform;
         Vector3 rayOrigin = muzzleTransform.position;
         Vector3 rayDirection = muzzleTransform.forward;
-        Debug.DrawRay(rayOrigin, rayDirection * 100f, Color.cyan, 2.0f);
+
         RaycastHit hit;
-        // Se lanza el Raycast desde la posición y dirección del cañón del arma.
-        if (Physics.Raycast(rayOrigin, rayDirection, out hit, 100f, enemyLayer))
+        float sphereRadius = 0.1f; // Radio de la "bala" para el SphereCast.
+
+        // Usamos SphereCast en lugar de Raycast para un impacto más robusto.
+        if (Physics.SphereCast(rayOrigin, sphereRadius, rayDirection, out hit, 100f, enemyLayer))
         {
-            Debug.Log("<color=green>¡Impacto de Raycast! Objeto: " + hit.collider.name + "</color>", hit.collider.gameObject);
+            Debug.Log("<color=green>¡Impacto de SphereCast! Objeto: " + hit.collider.name + "</color>", hit.collider.gameObject);
             _MuzzleFlashWeamon.LookAtPosition(hit.point);
 
             Health targetHealth = hit.collider.GetComponent<Health>();
@@ -51,8 +53,7 @@ public class WeaponRifle : WeaponBase
         }
         else
         {
-            Debug.Log("<color=red>Disparo al aire. El Raycast no impactó con nada.</color>");
-            // Si no se impacta nada, los efectos visuales apuntan hacia adelante en la dirección del disparo.
+            Debug.Log("<color=red>Disparo al aire. El SphereCast no impactó con nada.</color>");
             _MuzzleFlashWeamon.LookAtPosition(rayOrigin + rayDirection * 100f);
         }
 
