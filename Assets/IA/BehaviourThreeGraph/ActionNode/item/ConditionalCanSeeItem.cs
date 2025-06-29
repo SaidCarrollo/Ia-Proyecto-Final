@@ -8,6 +8,7 @@ public class ConditionalCanSeeItem : Conditional
 {
     private IACharacterVehiculo _IACharacterVehiculo;
     private IAEyeBase AIEye;
+    private Health _health;
 
     public override void OnStart()
     {
@@ -15,19 +16,35 @@ public class ConditionalCanSeeItem : Conditional
         if (_IACharacterVehiculo != null)
         {
             AIEye = _IACharacterVehiculo.AIEye as IAEyeBase;
+            _health = _IACharacterVehiculo.health;
         }
     }
 
     public override TaskStatus OnUpdate()
     {
-        if (AIEye == null || _IACharacterVehiculo == null)
+        if (AIEye == null || _health == null || AIEye.ViewItem == null || _health.IsDead)
         {
             return TaskStatus.Failure;
         }
 
-        if (AIEye.ViewItem != null && _IACharacterVehiculo.health.health < _IACharacterVehiculo.health.healthMax)
+        // Condición 1: ¿Necesita la IA curarse?
+        bool needsHealth = _health.health < _health.healthMax;
+
+        if (needsHealth)
         {
-            return TaskStatus.Success;
+            Item visibleItem = AIEye.ViewItem;
+            UnitGame unitType = _health._UnitGame;
+
+            // Condición 2: ¿El ítem es apropiado para la unidad?
+            if ((unitType == UnitGame.Carnivore || unitType == UnitGame.Hunter) && visibleItem.itemType == ItemType.Carne)
+            {
+                return TaskStatus.Success; // Carnívoros y Cazadores comen Carne.
+            }
+
+            if (unitType == UnitGame.Herbivore && visibleItem.itemType == ItemType.Planta)
+            {
+                return TaskStatus.Success; // Herbívoros comen Plantas.
+            }
         }
 
         return TaskStatus.Failure;

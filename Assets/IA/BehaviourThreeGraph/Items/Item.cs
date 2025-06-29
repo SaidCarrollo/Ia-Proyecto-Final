@@ -3,15 +3,16 @@ using UnityEngine;
 public enum ItemType
 {
     Carne,
-    Planta,
-    Balas
+    Planta, // Añadido
+    Agua,
+    Balas  // Añadido
 }
 
 public abstract class Item : MonoBehaviour
 {
     [Header("Configuración del Ítem")]
     public ItemType itemType;
-    public int value; 
+    public int value;
 
     public abstract void Consume(Health consumer);
 

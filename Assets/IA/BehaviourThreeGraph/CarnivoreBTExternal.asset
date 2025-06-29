@@ -33,8 +33,7 @@ MonoBehaviour:
         Follow Enemy","Instant":true}]},{"Type":"BehaviorDesigner.Runtime.Tasks.Sequence","NodeData":{"Offset":"(388.7705,154.77977)"},"ID":17,"Name":"Sequence","Instant":true,"AbortTypeabortType":"None","Children":[{"Type":"ActionNodeViewEnemy","NodeData":{"Offset":"(-169.639984,116.8468)"},"ID":18,"Name":"Action
         Node View Enemy","Instant":true},{"Type":"ActionColliderAttack","NodeData":{"Offset":"(37.451355,117.795959)"},"ID":19,"Name":"Action
         Collider Attack","Instant":true},{"Type":"ActionNodeAttack","NodeData":{"Offset":"(216.521149,117.795959)"},"ID":20,"Name":"Action
-        Node Attack","Instant":true}]}]}]},"DetachedTasks":[{"Type":"ActionConsumeItem","NodeData":{"Offset":"(-1120,850)"},"ID":21,"Name":"Action
-        Consume Item","Instant":true,"SharedFloatconsumeDistance":{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":null,"SinglemValue":1.5}}]}'
+        Node Attack","Instant":true}]}]}]}}'
       fieldSerializationData:
         typeName: []
         fieldNameHash: 

@@ -77,4 +77,21 @@ public class WeaponsManager : MonoBehaviour
         int prevIndex = (currentWeaponIndex - 1 + weapons.Count) % weapons.Count;
         SetCurrentWeapon(prevIndex);
     }
+    public void AddAmmo(int amount)
+    {
+        if (currentWeaponBase == null)
+        {
+            Debug.LogWarning("WeaponsManager: No hay un arma seleccionada para añadir munición.");
+            return;
+        }
+
+        currentWeaponBase._cartridge += amount;
+        if (currentWeaponBase._cartridge > currentWeaponBase._Maxcartridge)
+        {
+            currentWeaponBase._cartridge = currentWeaponBase._Maxcartridge;
+        }
+
+        Debug.Log($"Se añadieron {amount} cartuchos a {currentWeaponBase.weaponName}. Total de reserva ahora: {currentWeaponBase._cartridge}");
+
+    }
 }

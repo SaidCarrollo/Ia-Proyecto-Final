@@ -326,7 +326,13 @@ public class IAEyeBase : MonoBehaviour
 
     public virtual void Scan()
     {
-        if (health.HurtingMe != null) return;
+        if (health.HurtingMe != null)
+        {
+            // Asignamos al atacante como nuestro enemigo visible.
+            ViewEnemy = health.HurtingMe;
+            // Saltamos el resto del escaneo para enfocarnos en él.
+            return;
+        }
         ViewAllie = null;
         ViewEnemy = null;
         ViewItem = null;
@@ -355,22 +361,33 @@ public class IAEyeBase : MonoBehaviour
                 {
                     ExtractViewEnemy(ref min_dist, Scanhealth);
                 }
-                Item scanItem = obj.GetComponent<Item>();
-                if (scanItem != null && mainDataView.IsInSight(scanItem.transform))
+                Item scanItem = obj.GetComponent<Item>(); //
+                if (scanItem != null && mainDataView.IsInSight(scanItem.transform)) //
                 {
-                    // Filtramos para que un carnívoro solo se interese por la carne
-                    if (health._UnitGame == UnitGame.Carnivore && scanItem.itemType == ItemType.Carne)
+                    bool isItemOfInterest = false;
+
+                    // Lógica para Carnívoros y Cazadores (ambos comen Carne)
+                    if ((health._UnitGame == UnitGame.Carnivore || health._UnitGame == UnitGame.Hunter) && scanItem.itemType == ItemType.Carne)
                     {
-                        float dist = (transform.position - scanItem.transform.position).magnitude;
+                        isItemOfInterest = true;
+                    }
+                    // Lógica para Herbívoros (comen Planta)
+                    else if (health._UnitGame == UnitGame.Herbivore && scanItem.itemType == ItemType.Planta)
+                    {
+                        isItemOfInterest = true;
+                    }
+
+                    // Si el ítem es interesante para esta IA, comprobamos si es el más cercano
+                    if (isItemOfInterest)
+                    {
+                        float dist = (transform.position - scanItem.transform.position).magnitude; //
                         if (min_dist_item > dist)
                         {
-                            ViewItem = scanItem;
-                            min_dist_item = dist;
+                            ViewItem = scanItem; //
+                            min_dist_item = dist; //
                         }
                     }
                 }
-
-
 
 
             }
