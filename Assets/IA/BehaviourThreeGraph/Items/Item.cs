@@ -4,7 +4,7 @@ public enum ItemType
 {
     Carne,
     Planta,
-    Agua
+    Balas
 }
 
 public abstract class Item : MonoBehaviour
