@@ -76,7 +76,7 @@ public class WeaponBase : MonoBehaviour
 {
     [Header("Muzzle Flash Weamon")]
     public MuzzleFlashWeamon _MuzzleFlashWeamon = new MuzzleFlashWeamon(); //
-
+    public GameObject bulletTrailPrefab;
     [Header("Gun Attributes")]
     public string weaponName;
     public WeaponType weaponType;
