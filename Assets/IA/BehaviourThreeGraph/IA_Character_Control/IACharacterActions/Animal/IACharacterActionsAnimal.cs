@@ -32,4 +32,12 @@ public class IACharacterActionsAnimal: IACharacterActions
         }
         FrameRate += Time.deltaTime;
     }
+    public void ConsumeVisibleItem()
+    {
+        if (AIEye != null && AIEye.ViewItem != null)
+        {
+            // La lógica de consumir el ítem ahora vive aquí.
+            AIEye.ViewItem.Consume(health);
+        }
+    }
 }

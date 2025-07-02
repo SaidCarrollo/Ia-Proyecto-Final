@@ -31,24 +31,21 @@ public class ActionFollowItem : Action
         }
 
         // Calculamos la distancia al ítem
+
         Vector3 itemPosition = AIEye.ViewItem.transform.position;
         float distanceToItem = Vector3.Distance(transform.position, itemPosition);
 
-        // Si estamos lejos, seguimos moviéndonos
         if (distanceToItem > consumeDistance.Value)
         {
+            // Sigue moviéndose si está lejos.
             _IACharacterVehiculo.MoveToPosition(itemPosition);
-            _IACharacterVehiculo.LookPosition(itemPosition);
-
-            // Devolvemos Running porque la acción aún no ha terminado.
             return TaskStatus.Running;
         }
-        else // Si ya estamos lo suficientemente cerca
+        else
         {
-            // Consumimos el ítem
-            AIEye.ViewItem.Consume(_IACharacterVehiculo.health);
-
-            // ¡Hemos terminado! Devolvemos Success para que el árbol pueda continuar.
+            // Ya está en rango. Su trabajo aquí ha terminado.
+            // Detiene el movimiento para evitar pasarse de largo.
+            _IACharacterVehiculo.MoveToPosition(transform.position);
             return TaskStatus.Success;
         }
     }

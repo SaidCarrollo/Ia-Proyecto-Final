@@ -7,10 +7,15 @@ public class WeaponRifle : WeaponBase
     public LayerMask enemyLayer;
 
     [Tooltip("Distancia desde el cañón para centrar la esfera de detección a quemarropa.")]
-    public float pointBlankCheckDistance = 0.25f; // A 25cm delante del cañón
+    public float pointBlankCheckDistance = 0.25f;
 
     [Tooltip("Radio de la esfera de detección a quemarropa.")]
-    public float pointBlankCheckRadius = 0.3f; // Una esfera de 30cm de radio
+    public float pointBlankCheckRadius = 0.3f;
+
+    [Header("Configuración de bala")]
+    public GameObject bulletPrefab; // Prefab de la bala física
+    public float bulletSpeed = 50f; // Velocidad de la bala
+    public float bulletLifetime = 2f; // Tiempo de vida de la bala
 
     void Awake()
     {
@@ -22,10 +27,10 @@ public class WeaponRifle : WeaponBase
         base.LoadComponent();
     }
 
-    // --- SE HA CAMBIADO 'virtual' POR 'override' ---
     private void ProcessHit(Collider targetCollider, Vector3 hitPoint)
     {
-        _MuzzleFlashWeamon.LookAtPosition(hitPoint);
+        // NO es necesario modificar _MuzzleFlashWeamon.LookAtPosition aquí, 
+        // ya que el rastro se encargará de la dirección visual.
         Health targetHealth = targetCollider.GetComponent<Health>();
         if (targetHealth != null)
         {
@@ -41,101 +46,123 @@ public class WeaponRifle : WeaponBase
     /// Genera el prefab del rastro de la bala desde el cañón hasta un punto final.
     /// </summary>
     /// <param name="endPoint">El punto del mundo donde el rastro debe terminar.</param>
-    private void SpawnBulletTrail(Vector3 endPoint)
+    private void GenerateTrail(Vector3 endPoint)
     {
-        if (bulletTrailPrefab == null) return; // Si no hay prefab asignado, no hacer nada
+        if (bulletTrailPrefab == null) return;
 
-        // Determina el punto de origen del efecto visual
+        // Obtenemos el punto de origen del disparo desde el MuzzleFlash
         Transform muzzleTransform = _MuzzleFlashWeamon.root != null ? _MuzzleFlashWeamon.root.transform : this.transform;
 
-        // Instanciar el prefab del rastro en la posición del cañón
-        GameObject trailObject = Instantiate(bulletTrailPrefab, muzzleTransform.position, Quaternion.identity);
+        // Creamos una instancia del prefab del rastro
+        GameObject trailInstance = Instantiate(bulletTrailPrefab, muzzleTransform.position, Quaternion.identity);
 
-        // Obtener el script del rastro y decirle a dónde ir
-        BulletTrail trail = trailObject.GetComponent<BulletTrail>();
-        if (trail != null)
+        // Hacemos que el rastro "mire" hacia el punto de impacto
+        trailInstance.transform.LookAt(endPoint);
+    }
+
+    /// <summary>
+    /// Dispara una bala física hacia la posición objetivo
+    /// </summary>
+    private void FireBullet(Vector3 startPosition, Vector3 targetPosition)
+    {
+        if (bulletPrefab == null)
         {
-            trail.SetTarget(endPoint);
+            Debug.LogWarning("WeaponRifle: No hay prefab de bala asignado.");
+            return;
         }
-        else
+
+        // Calcular dirección
+        Vector3 direction = (targetPosition - startPosition).normalized;
+
+        // Instanciar bala
+        GameObject bullet = Instantiate(bulletPrefab, startPosition, Quaternion.identity);
+
+        // Orientar bala hacia la dirección
+        bullet.transform.forward = direction;
+
+        // Configurar bala
+        Bullet bulletScript = bullet.GetComponent<Bullet>();
+        if (bulletScript == null)
         {
-            // Si el prefab no tiene el script, destruir el objeto para no dejar basura
-            Debug.LogWarning("El prefab del rastro de bala no tiene el script 'BulletTrail'.");
-            Destroy(trailObject);
+            // Si no tiene el script, añadirlo
+            bulletScript = bullet.AddComponent<Bullet>();
         }
+
+        bulletScript.Initialize(direction, bulletSpeed, bulletLifetime);
     }
 
     public override void Shoot()
     {
-        if (!canShoot) return; //
-        if (Time.time < FrameRate) return; //
-        FrameRate = Time.time + Rate; //
+        if (!canShoot) return;
+        if (Time.time < FrameRate) return;
+        FrameRate = Time.time + Rate;
 
-        _MuzzleFlashWeamon.Play(); //
-        Transform muzzleTransform = _MuzzleFlashWeamon.root != null ? _MuzzleFlashWeamon.root.transform : this.transform; //
+        _MuzzleFlashWeamon.Play();
+        Transform muzzleTransform = _MuzzleFlashWeamon.root != null ? _MuzzleFlashWeamon.root.transform : this.transform;
+        Vector3 muzzlePosition = muzzleTransform.position;
+        Vector3 muzzleDirection = muzzleTransform.forward;
 
         // --- FASE 1: VERIFICACIÓN A QUEMARROPA ---
-        Vector3 pointBlankCenter = muzzleTransform.position + muzzleTransform.forward * pointBlankCheckDistance; //
-        Collider[] pointBlankHits = Physics.OverlapSphere(pointBlankCenter, pointBlankCheckRadius, enemyLayer); //
+        Vector3 pointBlankCenter = muzzlePosition + muzzleDirection * pointBlankCheckDistance;
+        Collider[] pointBlankHits = Physics.OverlapSphere(pointBlankCenter, pointBlankCheckRadius, enemyLayer);
 
         if (pointBlankHits.Length > 0)
         {
-            Collider targetCollider = pointBlankHits[0]; //
-            Vector3 hitPoint = targetCollider.ClosestPoint(pointBlankCenter); //
-            Debug.Log("<color=magenta>¡Impacto a QUEMARROPA! Objeto: " + targetCollider.name + "</color>", targetCollider.gameObject); //
-            ProcessHit(targetCollider, hitPoint); //
-            SpawnBulletTrail(hitPoint); // Llamar a la función del rastro con el punto de impacto
+            Collider targetCollider = pointBlankHits[0];
+            Vector3 hitPoint = targetCollider.ClosestPoint(pointBlankCenter);
+            Debug.Log("<color=magenta>¡Impacto a QUEMARROPA! Objeto: " + targetCollider.name + "</color>", targetCollider.gameObject);
+            ProcessHit(targetCollider, hitPoint);
+            GenerateTrail(hitPoint);
+            FireBullet(muzzlePosition, hitPoint); // Disparar bala física
         }
         else
         {
             // --- FASE 2: DISPARO A DISTANCIA ---
-            RaycastHit hit; //
-            Vector3 rayOrigin = muzzleTransform.position; //
-            Vector3 rayDirection = muzzleTransform.forward; //
-            float longRangeSphereRadius = 0.1f; //
+            RaycastHit hit;
+            Vector3 rayOrigin = muzzlePosition;
+            float longRangeSphereRadius = 0.1f;
             float maxDistance = 100f;
 
-            if (Physics.SphereCast(rayOrigin, longRangeSphereRadius, rayDirection, out hit, maxDistance, enemyLayer)) //
+            if (Physics.SphereCast(rayOrigin, longRangeSphereRadius, muzzleDirection, out hit, maxDistance, enemyLayer))
             {
-                Debug.Log("<color=green>¡Impacto a DISTANCIA! Objeto: " + hit.collider.name + "</color>", hit.collider.gameObject); //
-                ProcessHit(hit.collider, hit.point); //
-                SpawnBulletTrail(hit.point); // Llamar a la función del rastro con el punto de impacto
+                Debug.Log("<color=green>¡Impacto a DISTANCIA! Objeto: " + hit.collider.name + "</color>", hit.collider.gameObject);
+                ProcessHit(hit.collider, hit.point);
+                GenerateTrail(hit.point);
+                FireBullet(muzzlePosition, hit.point); // Disparar bala física
             }
             else
             {
                 // No se impactó nada
-                Debug.Log("<color=red>Disparo al aire. Ninguna detección tuvo éxito.</color>"); //
-                Vector3 endPoint = rayOrigin + rayDirection * maxDistance; // Calcula el punto final en el aire
-                _MuzzleFlashWeamon.LookAtPosition(endPoint); //
-                SpawnBulletTrail(endPoint); // Llamar a la función del rastro con el punto final en el aire
+                Debug.Log("<color=red>Disparo al aire. Ninguna detección tuvo éxito.</color>");
+                Vector3 endPoint = rayOrigin + muzzleDirection * maxDistance;
+                GenerateTrail(endPoint);
+                FireBullet(muzzlePosition, endPoint); // Disparar bala física al aire
             }
         }
 
-        // El conteo de balas se reduce sin importar si se impactó o no, porque el disparo se realizó.
-        _countbullet--; //
+        // El conteo de balas se reduce sin importar si se impactó o no.
+        _countbullet--;
         if (_countbullet <= 0)
         {
-            Debug.Log("Out of ammo!"); //
+            Debug.Log("Out of ammo!");
         }
     }
 
-    // Gizmos para ver las áreas de detección en el editor.
+    // Gizmos (sin cambios)
     private void OnDrawGizmosSelected()
     {
-        // Intenta encontrar el transform del muzzle flash, si no, usa el transform del arma.
-        Transform muzzleTransform = null; //
+        Transform muzzleTransform = null;
         if (_MuzzleFlashWeamon != null && _MuzzleFlashWeamon.root != null)
         {
-            muzzleTransform = _MuzzleFlashWeamon.root.transform; //
+            muzzleTransform = _MuzzleFlashWeamon.root.transform;
         }
         else
         {
-            muzzleTransform = this.transform; //
+            muzzleTransform = this.transform;
         }
 
-        // Dibuja la esfera de detección a quemarropa
-        Gizmos.color = new Color(1, 0, 1, 0.5f); //
-        Vector3 pointBlankCenter = muzzleTransform.position + muzzleTransform.forward * pointBlankCheckDistance; //
-        Gizmos.DrawSphere(pointBlankCenter, pointBlankCheckRadius); //
+        Gizmos.color = new Color(1, 0, 1, 0.5f);
+        Vector3 pointBlankCenter = muzzleTransform.position + muzzleTransform.forward * pointBlankCheckDistance;
+        Gizmos.DrawSphere(pointBlankCenter, pointBlankCheckRadius);
     }
 }

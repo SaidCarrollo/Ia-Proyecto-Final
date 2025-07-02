@@ -5,33 +5,8 @@ using UnityEngine;
 public class IACharacterVehiculoHerbivore : IACharacterVehiculoAnimal
 {
 
-    //// Start is called before the first frame update
-    //void Start()
-    //{
-    //    this.LoadComponent();
-    //}
-    //public override void LoadComponent()
-    //{
-    //    base.LoadComponent();
-
-    //}
-
-    //public override void MoveToPosition(Vector3 pos)
-    //{
-    //    base.MoveToPosition(pos);
-    //}
-
-    //public override void MoveToEnemy()
-    //{
-    //    base.MoveToEnemy();
-    //}
-    //public override void MoveToAllied()
-    //{
-    //    base.MoveToAllied();
-    //}
-    //public override void MoveToEvadEnemy()
-    //{
-    //    base.MoveToEvadEnemy();
-    //}
-
+    void Start()
+    {
+        base.LoadComponent();
+    }
 }
