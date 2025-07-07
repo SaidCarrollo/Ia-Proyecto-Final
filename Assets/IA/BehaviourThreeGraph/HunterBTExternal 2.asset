@@ -27,15 +27,12 @@ MonoBehaviour:
         Wander","Instant":true}]},{"Type":"BehaviorDesigner.Runtime.Tasks.Sequence","NodeData":{"Offset":"(-47.8754272,701.604858)"},"ID":9,"Name":"Sequence","Instant":true,"AbortTypeabortType":"None","Children":[{"Type":"ActionNodeViewEnemy","NodeData":{"Offset":"(-209.0002,124.702156)"},"ID":10,"Name":"Action
         Node View Enemy","Instant":true},{"Type":"ActionNotColliderRadioAction","NodeData":{"Offset":"(-4.933831,135.477386)"},"ID":11,"Name":"Action
         Not Collider Radio Action","Instant":true},{"Type":"ActionFollowEnemy","NodeData":{"Offset":"(200.752914,125.270447)"},"ID":12,"Name":"Action
-        Follow Enemy","Instant":true}]},{"Type":"BehaviorDesigner.Runtime.Tasks.Sequence","NodeData":{"Offset":"(168.8178,532.3898)","Collapsed":true},"ID":13,"Name":"Sequence","Instant":true,"Disabled":true,"AbortTypeabortType":"None","Children":[{"Type":"ActionNodeViewEnemy","NodeData":{"Offset":"(-169.639984,116.8468)"},"ID":14,"Name":"Action
-        Node View Enemy","Instant":true},{"Type":"ActionColliderAttack","NodeData":{"Offset":"(37.451355,117.795959)"},"ID":15,"Name":"Action
-        Collider Attack","Instant":true},{"Type":"ActionNodeAttack","NodeData":{"Offset":"(216.521149,117.795959)"},"ID":16,"Name":"Action
-        Node Attack","Instant":true}]},{"Type":"BehaviorDesigner.Runtime.Tasks.Parallel","NodeData":{"Offset":"(590.5,249)"},"ID":17,"Name":"Parallel","Instant":true,"AbortTypeabortType":"None","Children":[{"Type":"BehaviorDesigner.Runtime.Tasks.Sequence","NodeData":{"Offset":"(-100,160)"},"ID":18,"Name":"Sequence","Instant":true,"AbortTypeabortType":"None","Children":[{"Type":"ActionNodeViewEnemy","NodeData":{"Offset":"(-183.380066,206.27327)"},"ID":19,"Name":"Action
-        Node View Enemy","Instant":true},{"Type":"ActionColliderShoot","NodeData":{"Offset":"(-2.13023949,214.615814)"},"ID":20,"Name":"Action
-        Collider Shoot","Instant":true},{"Type":"ActionNodeShoot","NodeData":{"Offset":"(172.159317,210.395432)"},"ID":21,"Name":"Action
-        Node Shoot","Instant":true}]},{"Type":"BehaviorDesigner.Runtime.Tasks.Sequence","NodeData":{"Offset":"(370,330)"},"ID":22,"Name":"Sequence","Instant":true,"AbortTypeabortType":"None","Children":[{"Type":"ActionNodeViewEnemy","NodeData":{"Offset":"(-212.18515,197.643814)"},"ID":23,"Name":"Action
-        Node View Enemy","Instant":true},{"Type":"ActionColliderRadioAction","NodeData":{"Offset":"(-0.197640419,196.087036)"},"ID":24,"Name":"Action
-        Collider Radio Action","Instant":true},{"Type":"ActionMoveStrategy","NodeData":{"Offset":"(192.070145,197.643814)"},"ID":25,"Name":"Action
+        Follow Enemy","Instant":true}]},{"Type":"BehaviorDesigner.Runtime.Tasks.Parallel","NodeData":{"Offset":"(590.5,249)"},"ID":13,"Name":"Parallel","Instant":true,"AbortTypeabortType":"None","Children":[{"Type":"BehaviorDesigner.Runtime.Tasks.Sequence","NodeData":{"Offset":"(-100,160)"},"ID":14,"Name":"Sequence","Instant":true,"AbortTypeabortType":"None","Children":[{"Type":"ActionNodeViewEnemy","NodeData":{"Offset":"(-183.380066,206.27327)"},"ID":15,"Name":"Action
+        Node View Enemy","Instant":true},{"Type":"ActionColliderShoot","NodeData":{"Offset":"(-2.13023949,214.615814)"},"ID":16,"Name":"Action
+        Collider Shoot","Instant":true},{"Type":"ActionNodeShoot","NodeData":{"Offset":"(172.159317,210.395432)"},"ID":17,"Name":"Action
+        Node Shoot","Instant":true}]},{"Type":"BehaviorDesigner.Runtime.Tasks.Sequence","NodeData":{"Offset":"(370,330)"},"ID":18,"Name":"Sequence","Instant":true,"AbortTypeabortType":"None","Children":[{"Type":"ActionNodeViewEnemy","NodeData":{"Offset":"(-212.18515,197.643814)"},"ID":19,"Name":"Action
+        Node View Enemy","Instant":true},{"Type":"ActionColliderRadioAction","NodeData":{"Offset":"(-0.197640419,196.087036)"},"ID":20,"Name":"Action
+        Collider Radio Action","Instant":true},{"Type":"ActionMoveStrategy","NodeData":{"Offset":"(192.070145,197.643814)"},"ID":21,"Name":"Action
         Move Strategy","Instant":true}]}]}]}]}}'
       fieldSerializationData:
         typeName: []
