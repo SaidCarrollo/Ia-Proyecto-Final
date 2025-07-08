@@ -5,7 +5,7 @@ public class MenuManager : MonoBehaviour
 {
     public void PlayGame()
     {
-        SceneManager.LoadScene("Game"); // nombre exacto de la escena del juego
+        SceneManager.LoadScene("test1"); // nombre exacto de la escena del juego
     }
 
     public void QuitGame()

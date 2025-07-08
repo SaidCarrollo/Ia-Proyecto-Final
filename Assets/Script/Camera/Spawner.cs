@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.UI;
 using System.Collections.Generic;
+using DG.Tweening;
 
 public class Spawner : MonoBehaviour
 {
@@ -15,20 +16,27 @@ public class Spawner : MonoBehaviour
     private List<GameObject> spawnedObjects = new List<GameObject>();
 
     [Header("UI")]
-    public Image modeIcon; // arrastras aquí el objeto de imagen del Canvas
-    public Sprite spawnIcon;  // icono modo instanciar
-    public Sprite deleteIcon; // icono modo borrar
+    public Image modeIcon;
+    public Sprite spawnIcon;
+    public Sprite deleteIcon;
+
+    [Header("Escalas de los prefabs")]
+    [SerializeField]
+    private Vector3[] targetScales = new Vector3[]
+    {
+        new Vector3(3.1095f, 3.1095f, 3.1095f),     // Prefab 0
+        new Vector3(6.04218f, 6.04218f, 6.04218f),  // Prefab 1
+        new Vector3(1f, 1f, 1f)                    // Prefab 2
+    };
 
     void Start()
     {
-        // al inicio, forzamos el modo spawn
         deleteMode = false;
         UpdateModeIcon();
     }
 
     void Update()
     {
-        // alternar modo con B
         if (Input.GetKeyDown(KeyCode.B))
         {
             deleteMode = !deleteMode;
@@ -36,14 +44,13 @@ public class Spawner : MonoBehaviour
             UpdateModeIcon();
         }
 
-        if (Input.GetMouseButtonDown(0)) // click izquierdo
+        if (Input.GetMouseButtonDown(0))
         {
             Ray ray = cam.ScreenPointToRay(Input.mousePosition);
             if (Physics.Raycast(ray, out RaycastHit hit))
             {
                 if (deleteMode)
                 {
-                    // borrar objeto
                     GameObject target = hit.collider.gameObject;
                     if (spawnedObjects.Contains(target))
                     {
@@ -53,12 +60,19 @@ public class Spawner : MonoBehaviour
                 }
                 else
                 {
-                    // instanciar
                     if (NavMesh.SamplePosition(hit.point, out NavMeshHit navHit, navMeshCheckRadius, NavMesh.AllAreas))
                     {
-                        GameObject obj = Instantiate(prefabs[currentPrefabIndex], navHit.position, Quaternion.identity);
+                        GameObject prefabToSpawn = prefabs[currentPrefabIndex];
+                        Vector3 finalScale = prefabToSpawn.transform.localScale;
+
+                        GameObject obj = Instantiate(prefabToSpawn, navHit.position, Quaternion.identity);
+                        obj.transform.localScale = Vector3.zero;
+
+                        obj.transform.DOScale(finalScale, 0.3f).SetEase(Ease.OutBack);
+
                         spawnedObjects.Add(obj);
                     }
+
                     else
                     {
                         Debug.Log("No hay NavMesh cerca del punto de clic.");
@@ -96,3 +110,5 @@ public class Spawner : MonoBehaviour
         spawnedObjects.Clear();
     }
 }
+
+
