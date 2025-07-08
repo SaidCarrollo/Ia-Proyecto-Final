@@ -603,6 +603,7 @@ Transform:
   - {fileID: 88317070364057586}
   - {fileID: 4075065891022920378}
   - {fileID: 2981660483899706960}
+  - {fileID: 8034859622365198019}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!95 &1845689120824290439
@@ -1253,10 +1254,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   itemDropOnDeathPrefab: {fileID: 1832839999014049071, guid: cc747e56941c42e4dbe67e935ccb19b7, type: 3}
-  continuousDeathParticles: {fileID: 3548588485384254794, guid: fdb6a31abd6d68147883ef1e4e9f8305, type: 3}
+  continuousDeathParticles: {fileID: 8034859622365198028}
   deathRotationDuration: 0.5
-  respawnPoints:
-  - {fileID: 0}
+  delayBeforeDestroy: 3
 --- !u!1 &2554459520144457463
 GameObject:
   m_ObjectHideFlags: 0
@@ -2225,3 +2225,82 @@ Transform:
   - {fileID: 20042761689424604}
   m_Father: {fileID: 7948933578997553780}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1001 &6827052606316757894
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 4208371291829219119}
+    m_Modifications:
+    - target: {fileID: 3548588485384254789, guid: fdb6a31abd6d68147883ef1e4e9f8305, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.3650755
+      objectReference: {fileID: 0}
+    - target: {fileID: 3548588485384254789, guid: fdb6a31abd6d68147883ef1e4e9f8305, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.3650755
+      objectReference: {fileID: 0}
+    - target: {fileID: 3548588485384254789, guid: fdb6a31abd6d68147883ef1e4e9f8305, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.3650755
+      objectReference: {fileID: 0}
+    - target: {fileID: 3548588485384254789, guid: fdb6a31abd6d68147883ef1e4e9f8305, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3548588485384254789, guid: fdb6a31abd6d68147883ef1e4e9f8305, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.204
+      objectReference: {fileID: 0}
+    - target: {fileID: 3548588485384254789, guid: fdb6a31abd6d68147883ef1e4e9f8305, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3548588485384254789, guid: fdb6a31abd6d68147883ef1e4e9f8305, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3548588485384254789, guid: fdb6a31abd6d68147883ef1e4e9f8305, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3548588485384254789, guid: fdb6a31abd6d68147883ef1e4e9f8305, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3548588485384254789, guid: fdb6a31abd6d68147883ef1e4e9f8305, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3548588485384254789, guid: fdb6a31abd6d68147883ef1e4e9f8305, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3548588485384254789, guid: fdb6a31abd6d68147883ef1e4e9f8305, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3548588485384254789, guid: fdb6a31abd6d68147883ef1e4e9f8305, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3548588485384254792, guid: fdb6a31abd6d68147883ef1e4e9f8305, type: 3}
+      propertyPath: m_Name
+      value: Blood Splash 1
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: fdb6a31abd6d68147883ef1e4e9f8305, type: 3}
+--- !u!4 &8034859622365198019 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 3548588485384254789, guid: fdb6a31abd6d68147883ef1e4e9f8305, type: 3}
+  m_PrefabInstance: {fileID: 6827052606316757894}
+  m_PrefabAsset: {fileID: 0}
+--- !u!198 &8034859622365198028 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 3548588485384254794, guid: fdb6a31abd6d68147883ef1e4e9f8305, type: 3}
+  m_PrefabInstance: {fileID: 6827052606316757894}
+  m_PrefabAsset: {fileID: 0}
