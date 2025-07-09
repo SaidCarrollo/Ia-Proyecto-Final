@@ -4,33 +4,43 @@ using BehaviorDesigner.Runtime.Tasks;
 [TaskCategory("MyAI/Move")]
 public class ActionFlee : ActionNodeVehicle
 {
-    // Ya no se necesita ninguna variable de lógica difusa o umbrales aquí.
+    // Variable para guardar la referencia específica al componente del animal.
+    private IACharacterVehiculoAnimal _animal;
 
+    /// <summary>
+    /// Se llama una vez cuando la tarea comienza a ejecutarse.
+    /// </summary>
     public override void OnStart()
     {
         base.OnStart();
-        // La inicialización del sistema de huida se maneja en IACharacterVehiculo.
+        _animal = _IACharacterVehiculo as IACharacterVehiculoAnimal;
     }
 
+    /// <summary>
+    /// Se llama en cada frame mientras la tarea está activa.
+    /// </summary>
     public override TaskStatus OnUpdate()
     {
-        if (_IACharacterVehiculo == null || _IACharacterVehiculo.health.IsDead)
+        // Si no es un animal (_animal es null) o si está muerto, la tarea falla.
+        // Esto previene errores y asegura que solo los animales puedan usar esta acción.
+        if (_animal == null || _animal.health.IsDead)
         {
             return TaskStatus.Failure;
         }
 
-        // La lógica compleja ha sido movida. Ahora solo llamamos a un método,
-        // igual que en el nodo de ataque.
-        return _IACharacterVehiculo.EvaluateAndExecuteFlee();
+        // Llamamos al método de huida desde la referencia correcta del animal.
+        return _animal.EvaluateAndExecuteFlee();
     }
 
+    /// <summary>
+    /// Se llama cuando la tarea termina (ya sea por éxito, fallo o porque fue abortada).
+    /// </summary>
     public override void OnEnd()
     {
-        // Es una buena práctica asegurarse de que el estado de huida se limpie
-        // si el árbol de comportamiento aborta esta tarea.
-        if (_IACharacterVehiculo != null && _IACharacterVehiculo.IsCurrentlyFleeing)
+        // Nos aseguramos de limpiar el estado de huida si la tarea se interrumpe.
+        if (_animal != null && _animal.IsCurrentlyFleeing)
         {
-            _IACharacterVehiculo.ConcludeFleeState();
+            _animal.ConcludeFleeState();
         }
         base.OnEnd();
     }

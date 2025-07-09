@@ -121,5 +121,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a469310503186e94b80f42d227296473, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemType: 3
+  itemType: 2
   value: 100

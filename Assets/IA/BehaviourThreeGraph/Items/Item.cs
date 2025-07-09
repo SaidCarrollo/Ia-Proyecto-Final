@@ -4,7 +4,6 @@ public enum ItemType
 {
     Carne,
     Planta, // Añadido
-    Agua,
     Balas  // Añadido
 }
 

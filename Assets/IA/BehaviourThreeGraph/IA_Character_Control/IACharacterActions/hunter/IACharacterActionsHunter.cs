@@ -52,4 +52,5 @@ public class IACharacterActionsHunter : IACharacterActions
         rot.z = 0;
         transform.rotation = Quaternion.Lerp(transform.rotation, rot, Time.deltaTime * 50);
     }
+
 }

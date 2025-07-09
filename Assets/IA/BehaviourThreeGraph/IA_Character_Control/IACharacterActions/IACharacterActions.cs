@@ -9,4 +9,12 @@ public class IACharacterActions : IACharacterControl
         base.LoadComponent();
 
     }
+    public void ConsumeVisibleItem()
+    {
+        if (AIEye != null && AIEye.ViewItem != null)
+        {
+            // La lógica de consumir el ítem ahora vive aquí.
+            AIEye.ViewItem.Consume(health);
+        }
+    }
 }

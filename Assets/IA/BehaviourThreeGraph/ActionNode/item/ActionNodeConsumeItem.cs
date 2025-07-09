@@ -17,17 +17,18 @@ public class ActionNodeConsumeItem : ActionNodeAction
     {
         switch (_UnitGame)
         {
-            // Solo los animales consumen ítems de esta manera.
             case UnitGame.Herbivore:
             case UnitGame.Carnivore:
-            case UnitGame.Hunter: // Si el Hunter también come carne para curarse
-                if (_IACharacterActions is IACharacterActionsAnimal)
+                if (_IACharacterActions is IACharacterActionsAnimal animalActions)
                 {
-                    ((IACharacterActionsAnimal)_IACharacterActions).ConsumeVisibleItem();
+                    animalActions.ConsumeVisibleItem();
                 }
-                else if (_IACharacterActions is IACharacterActionsHunter) // Ejemplo si el Hunter no hereda de Animal
+                break;
+
+            case UnitGame.Hunter:
+                if (_IACharacterActions is IACharacterActionsHunter hunterActions)
                 {
-                    // ((IACharacterActionsHunter)_IACharacterActions).ConsumeVisibleItem();
+                    hunterActions.ConsumeVisibleItem(); //  Ahora sí se llama correctamente
                 }
                 break;
         }
