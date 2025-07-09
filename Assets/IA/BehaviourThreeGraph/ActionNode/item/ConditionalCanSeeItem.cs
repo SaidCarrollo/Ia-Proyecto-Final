@@ -4,7 +4,7 @@ using BehaviorDesigner.Runtime.Tasks;
 
 [TaskCategory("MyAI/Conditional")]
 [TaskDescription("Revisa si la IA puede ver un ítem (Carne) y si necesita curarse.")]
-public class ConditionalCanSeeItem : Conditional
+public class ConditionalNeedItem : Conditional
 {
     private IACharacterVehiculo _IACharacterVehiculo;
     private IAEyeBase AIEye;

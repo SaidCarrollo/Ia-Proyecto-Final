@@ -24,9 +24,9 @@ MonoBehaviour:
         Can See Item","Instant":true},{"Type":"ActionFollowItem","NodeData":{"Offset":"(96.5,150)"},"ID":5,"Name":"Action
         Follow Item","Instant":true,"SharedFloatconsumeDistance":{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":null,"SinglemValue":3.5}}]},{"Type":"BehaviorDesigner.Runtime.Tasks.Sequence","NodeData":{"Offset":"(-909.5124,189.756042)"},"ID":6,"Name":"Sequence","Instant":true,"AbortTypeabortType":"None","Children":[{"Type":"IAmLowheatlh","NodeData":{"Offset":"(-322,240)"},"ID":7,"Name":"I
         Am Lowheatlh","Instant":true,"SinglehealthThreshold":50},{"Type":"ActionNodeViewEnemy","NodeData":{"Offset":"(-150.549042,238.210449)"},"ID":8,"Name":"Action
-        Node View Enemy","Instant":true},{"Type":"IAmLowheatlh","NodeData":{"Offset":"(-3.772729,235.454559)"},"ID":9,"Name":"I
-        Am Lowheatlh","Instant":true,"SinglehealthThreshold":50},{"Type":"ActionNotColliderAttack","NodeData":{"Offset":"(170,240)"},"ID":10,"Name":"Action
-        Not Collider Attack","Instant":true},{"Type":"ActionFollowEnemy","NodeData":{"Offset":"(360,230)"},"ID":11,"Name":"Action
+        Node View Enemy","Instant":true},{"Type":"IAmLowheatlh","NodeData":{"Offset":"(6.227271,235.454559)"},"ID":9,"Name":"I
+        Am Lowheatlh","Instant":true,"Disabled":true,"SinglehealthThreshold":50},{"Type":"ActionNotColliderAttack","NodeData":{"Offset":"(170,240)"},"ID":10,"Name":"Action
+        Not Collider Attack","Instant":true},{"Type":"ActionFollowEnemy","NodeData":{"Offset":"(360,240)"},"ID":11,"Name":"Action
         Follow Enemy","Instant":true}]},{"Type":"BehaviorDesigner.Runtime.Tasks.Sequence","NodeData":{"Offset":"(-426.53064,98.88892)"},"ID":12,"Name":"Sequence","Instant":true,"AbortTypeabortType":"None","Children":[{"Type":"IAmLowheatlh","NodeData":{"Offset":"(-227.272736,181.8182)"},"ID":13,"Name":"I
         Am Lowheatlh","Instant":true,"SinglehealthThreshold":50},{"Type":"ActionNodeViewEnemy","NodeData":{"Offset":"(-73.3327,170)"},"ID":14,"Name":"Action
         Node View Enemy","Instant":true},{"Type":"ActionColliderAttack","NodeData":{"Offset":"(92.22266,171.1109)"},"ID":15,"Name":"Action

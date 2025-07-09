@@ -5178,8 +5178,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 545188bd2fba9664db3748f0110a6a0a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  fleeMultiplier: 2
   RangeWander: 15
+  fleeMultiplier: 2
 --- !u!114 &7441044613441638129
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5194,7 +5194,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   FrameRate: 0
   Rate: 1
-  damageAnimal: 4
+  damageAnimal: 8
 --- !u!114 &8882472208041250675
 MonoBehaviour:
   m_ObjectHideFlags: 0
